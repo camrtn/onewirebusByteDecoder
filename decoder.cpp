@@ -15,10 +15,12 @@ struct Sample {
 };
 
 // Parameters
-const double LOW_THRESHOLD = 1.0;     // Voltage below this is LOW
+const double LOW_THRESHOLD = 1.5;     // Voltage below this is LOW
+
 const double M_SHORT_PULSE_US = 2.0;
 const double M_LONG_PULSE_US = 9.0;
-const double S_LONG_PULSE_US = 1.5;   // Slave sends 0 with ~3μs pulse, some anomalies where it's around 1.5-2uS
+
+const double S_LONG_PULSE_US = 2.5;   // Slave sends 0 with ~4μs pulse, some anomalies where it's around 1.5-2uS
                                       // if pulse is shorter than ~1.5uS the slave sent a '1'
 
 const double BURST_GAP_THRESHOLD_US = 100.0; // Idle time to detect new burst
@@ -204,7 +206,7 @@ int main() {
 
         for (double dur : burst)
         {
-            if (mode) //decode master data mode
+            if (mode) //decode master data
             {
                 if (dur < M_SHORT_PULSE_US)
                 {
@@ -220,7 +222,7 @@ int main() {
                     invalidBitCount++;
                 }
             }
-            else //decode slave data mode
+            else //decode slave data
             {
                 if (dur < S_LONG_PULSE_US)
                 {
