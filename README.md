@@ -1,6 +1,5 @@
 A simple program that decodes one wire bus data bytes sent by a one wire bus master or slave device. Input a .csv file containing the waveform data from the one wire bus interaction you want to decode. I created this tool to help develop the F370 eeprom writer.
 
----------------------------------
 To use this program
 ---------------------------------
 1. Capture a one wire bus interaction between a master and slave device with an oscilloscope.
