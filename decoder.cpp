@@ -32,7 +32,7 @@ int main() {
     std::string userInput;
     std::string csv;
     std::string ext = ".csv";
-    std::string directory = "/home/advantech/OWB/DATA/";
+    std::string directory = "../DATA/";
     std::vector<fs::path> csvFiles;
 
     if(!fs::exists(directory))
