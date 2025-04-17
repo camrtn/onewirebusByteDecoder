@@ -18,7 +18,8 @@ struct Sample {
 const double LOW_THRESHOLD = 1.0;     // Voltage below this is LOW
 const double M_SHORT_PULSE_US = 2.0;
 const double M_LONG_PULSE_US = 9.0;
-const double S_LONG_PULSE_US = 1.5;   // Slave sends 0 with ~3μs pulse
+const double S_LONG_PULSE_US = 1.5;   // Slave sends 0 with ~3μs pulse, some anomalies where it's around 1.5-2uS
+                                      // if pulse is shorter than ~1.5uS the slave sent a '1'
 
 const double BURST_GAP_THRESHOLD_US = 100.0; // Idle time to detect new burst
 
@@ -120,22 +121,6 @@ int main() {
         }
     }
 
-    /*
-    // Filter out overlapping timestamps (same time as previous data point)
-    std::vector<Sample> filteredSamples;
-    filteredSamples.reserve(samples.size());
-
-    for (size_t i = 0; i < samples.size(); ++i)
-    {
-        if (i == 0 || samples[i].time != samples[i - 1].time)
-        {
-            filteredSamples.push_back(samples[i]);
-        }
-    }
-
-    samples = std::move(filteredSamples);  // Replace original with filtered version
-    */
-
     // Detect pulses from .csv data
     std::vector<double> pulseStartTimes;
     std::vector<double> pulseDurations;
@@ -227,7 +212,6 @@ int main() {
                 }
                 else
                 {
-                    std::cout << "Duration: " << dur << std::endl;
                     burstBits.push_back(-1);
                     invalidBitCount++;
                 }
@@ -259,7 +243,7 @@ int main() {
         }
 
         // Output debug info about a burst
-        if (debug)
+        if(debug)
         {
             std::cout << "Data burst " << burstIndex + 1 << " info: " << std::endl;
 
