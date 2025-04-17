@@ -59,22 +59,31 @@ int main() {
         return 1;
     }
 
-    std::cout <<"\nChoose the file you want to decode: ";
+    std::cout << std::endl;
+    std::cout <<"Choose the file you want to decode: " << std::flush;
     std::cin >> selection;
+
+    //clear terminal up to the beginning of the field that shows .csv files
+    for(int i = 0; i < index+3; i++)
+    {
+        std::cout << "\033[A\33[2K\r" << std::flush; //move cursor up one line, clear that line, return cursor to beginning
+    }
+    std::cout << std::endl; //insert newline under terminal prompt for formatting
 
     // Validate input
     if (selection < 1 || selection > static_cast<int>(csvFiles.size()))
     {
-        std::cerr << "Invalid selection." << std::endl;
+        std::cout << "\033[A\33[2K\r" << std::flush;
+        std::cerr << "Invalid entry!" << std::endl;
         return 1;
     }
 
     // Get selected file path
     fs::path selectedFile = csvFiles[selection - 1];
-    //std::cout << "\nYou selected: " << selectedFile.string() << std::endl;
 
-    std::cout << "Decode (m)aster or (s)lave data? ";
+    std::cout << "Decode (m)aster or (s)lave data? " << std::flush;
     std::cin >> userInput;
+    std::cout << "\033[A\33[2K\r" << std::flush;
 
     if(userInput == "m")
     {
@@ -84,11 +93,19 @@ int main() {
     {
         mode = 0;
     }
+    else
+    {
+        std::cout << "\033[A\33[2K\r" << std::flush;
+        std::cerr << "Invalid entry!" << std::endl;
+        return 1;
+    }
 
     userInput = "0";
 
-    std::cout << "Enable (d)ebug mode or (n)ormal mode? ";
+    std::cout << "Enable (d)ebug mode or (n)ormal mode? " << std::flush;
     std::cin >> userInput;
+    std::cout << "\033[A\33[2K\r" << std::flush;
+    std::cout << "\033[A\33[2K\r" << std::flush; //added second line clear for formatting sake
     
     if(userInput == "d")
     {
@@ -98,8 +115,11 @@ int main() {
     {
         debug = 0;
     }
-
-    std::cout << std::endl; //newline between input/output fields
+    else
+    {
+        std::cerr << "Invalid entry!" << std::endl;
+        return 1;
+    }
 
     std::ifstream file(selectedFile);
     if (!file.is_open()) {
@@ -217,7 +237,6 @@ int main() {
                 }
             }
         }
-        std::cout << std::endl;
 
         // Convert to bytes (LSB-first)
         std::vector<uint8_t> burstDecodedBytes;
@@ -260,6 +279,7 @@ int main() {
             std::cout << std::endl;
         }
 
+        std::cout << std::endl;
         // Output decoded bytes
         for (size_t i = 0; i < burstDecodedBytes.size(); ++i)
         {
@@ -271,6 +291,7 @@ int main() {
         }
         std::cout << std::endl;
     }
+    std::cout << std::endl;
 
     return 0;
 }
